@@ -1,7 +1,6 @@
-Rizea Adelina-Maria 334CA
 8 ianuarie 2023
 
----------------------------------TEMA 2 APD-----------------------------------
+------------------------------------------------------------------------------
 
 	In functia main se creeaza cele P thread-uri de nivel 1(angajatii
 care vor citi in mod paralel comenzile din fisierul orders.txt) si pool-ul
