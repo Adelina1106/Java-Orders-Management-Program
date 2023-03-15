@@ -1,0 +1,20 @@
+Rizea Adelina-Maria 334CA
+8 ianuarie 2023
+
+---------------------------------TEMA 2 APD-----------------------------------
+
+	Pentru implementarea bonusului am ales sa fac fiecare thread(angajat) de
+nivel 1(care citeste din orders.txt) sa citeasca, la nevoie, cate o comanda de
+care sa se ocupe, fara a citi intreg fisierul. 
+	Pentru realizarea acestei solutii, clasa care reprezinta angajatii de
+nivel 1(ThreadLvl1.java) are ca membru un BufferedReader. La crearea celor P 
+astfel de thread-uri, BufferedReader-ul este acelasi pentru fiecare dintre ele.
+In acest fel, intr-un bloc synchronized, fiecare thread citeste, la nevoie,
+folosind metoda readLine() cate o comanda din orders.txt de care se ocupa
+inainte de a o prelua pe urmatoarea. Astfel, fiecare angajat preia urmatoarea
+comanda nerezolvata fara a citi intreg fisierul, tinandu-se cont si de cazul
+in care prelucrarea unei comenzi este mai rapida decat altele, sarcinile fiind
+impartite aproximativ egal.
+
+	Similar, pentru fiecare comanda fisierul order_products.txt este citit
+o singura data, task-urile din aceeasi comanda primind acelasi BufferedReader.

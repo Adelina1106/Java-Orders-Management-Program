@@ -1,0 +1,57 @@
+Rizea Adelina-Maria 334CA
+8 ianuarie 2023
+
+---------------------------------TEMA 2 APD-----------------------------------
+
+	In functia main se creeaza cele P thread-uri de nivel 1(angajatii
+care vor citi in mod paralel comenzile din fisierul orders.txt) si pool-ul
+pentru task-urile de nivel 2 ce vor fi executate de grupul format din P
+workeri(thread-uri ce in cazul nostru reprezinta angajatii ce citesc
+din fisierul order_products.txt).
+
+===============================================================================
+Angajati pentru comenzi
+
+	Sunt create P astfel de thread-uri, acesta fiind numarul maxim de angajati
+posibili de nivel 1.
+	Comenzile sunt citite in mod paralel de cele P thread-uri de nivel 1,
+fiecare citind cate o comanda de care se va ocupa, folosind acelasi
+BufferedReader. Clasa ce reprezinta aceste thread-uri(ThreadLvl1.java) are ca
+si membru un ExecutorService cu P workeri, acelasi creat in main, in care vor
+fi adaugate toate task-urile pentru fiecare comanda.
+	Astfel, fiecare thread citeste la nevoie o comanda, preia numele comenzii
+si numarul de produse, si adauga atatea task-uri cate produse are comanda.
+Pentru a face angajatii(thread-urile) de nivel 1 sa astepte ca toate produsele
+din comanda lor sa fie shipped, am folosit un CountDownLatch, conform
+descrierii de mai jos(Dependenta angajati nivel 1 si 2).
+
+===============================================================================
+Angajati pentru produse
+
+	Modelul Thread Pool folosit are un grup de P workeri.
+	Angajatii ce se ocupa de cautarea produselor(thread-uri de nivel 2)
+preiau pe rand cate un task din pool-ul de task-uri. Fiind pentru fiecare
+produs din fiecare comanda cate un task, fiecare worker se ocupa de cate
+un produs, citind linie cu linie pana la gasirea lui(verifica daca linia
+citita contine numele comenzii). Cand produsul a fost gasit, ,,angajatul"
+marcheaza comanda ca shipped in order_products_out.txt si se opreste, iar
+urmatorul va citi in continuarea fisierului. Pentru aceasta, toate
+task-urile pentru produse din aceeasi comanda primesc acelasi BufferedReader,
+citind cate o linie cu readLine() intr-un bloc synchronized.
+
+===============================================================================
+Dependenta angajati nivel 1 si 2
+
+	Pentru a face un angajat de nivel 1 sa astepte ca toate produsele din
+comanda lui sa fie shipped am folosit un CountDownLatch.
+	Astfel, pentru fiecare comanda am creat un nou astfel de mecanism de
+sincronizare initializat cu numarul de produse din comanda. La momentul gasirii
+unui produs, fiecare thread de nivel 2 care va rezolva un task pentru o
+comanda, va decrementa count-ul latch-ului. In acelasi timp, thread-ul
+de nivel 1 asteapta ca count-ul latch-ului corespunzator comenzii sale
+sa ajunga la 0(metoda await()) pentru a putea scrie shipped in dreptul comenzii
+si a trece la urmatoarea(citirea urmatoarei linii/comenzi din orders.txt).
+
+==============================================================================
+
+	
